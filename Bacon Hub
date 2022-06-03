@@ -253,8 +253,8 @@ end)
 
 --- GUI
 local Tab = Window:NewTab("GUI")
-local Section = Tab:NewSection("Hotkey")
-Section:NewKeybind("KeybindText", "KeybindInfo", Enum.KeyCode.F, function()
+local Section = Tab:NewSection("HotkeyHotkey")
+Section:NewKeybind("Hotkey", "Click Any Key To Hide GUI", Enum.KeyCode.F, function()
 	Library:ToggleUI()
 end)
 
