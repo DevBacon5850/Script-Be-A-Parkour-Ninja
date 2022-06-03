@@ -251,6 +251,13 @@ Section:NewButton("Teleport", "Click To Teleport", function()
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players[Select].Character.HumanoidRootPart.CFrame
 end)
 
+--- GUI
+local Tab = Window:NewTab("GUI")
+local Section = Tab:NewSection("Hotkey")
+Section:NewKeybind("Hotkey", "Click Any Key To Hide GUI", Enum.KeyCode.F, function()
+	print("You just clicked the bind")
+end)
+
 --- Credits
 local Tab = Window:NewTab("Credits")
 local Section = Tab:NewSection("Credits By Dev_Bacon")
