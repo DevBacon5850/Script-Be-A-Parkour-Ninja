@@ -1,0 +1,262 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local Window = Library.CreateLib("Bacon HubITLE", "Midnight")
+--- Main
+local Tab = Window:NewTab("Main")
+local Section = Tab:NewSection("Main")
+Section:NewButton("ESP", "Click To ESP", function()
+    while wait() do
+        pcall(function()
+          for i,v in pairs(game.Players:GetChildren()) do
+               if not v.Character.Head:FindFirstChild("ESP") then
+                   local BillboardGui = Instance.new("BillboardGui")
+                   local TextLabel = Instance.new("TextLabel")
+                   BillboardGui.Parent = v.Character.Head
+                   BillboardGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+                   BillboardGui.Active = true
+                   BillboardGui.Name = "ESP"
+                   BillboardGui.AlwaysOnTop = true
+                   BillboardGui.LightInfluence = 1.000
+                   BillboardGui.Size = UDim2.new(0, 200, 0, 50)
+                   BillboardGui.StudsOffset = Vector3.new(0, 2.5, 0)
+                   TextLabel.Parent = BillboardGui
+                   TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                   TextLabel.BackgroundTransparency = 1.000
+                   TextLabel.Size = UDim2.new(0, 200, 0, 50)
+                   TextLabel.Font = Enum.Font.GothamBold
+                   TextLabel.Text = v.Name
+                   TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+                   TextLabel.TextScaled = true
+                   TextLabel.TextSize = 14.000
+                   TextLabel.TextStrokeTransparency = 0.000
+                   TextLabel.TextWrapped = true
+                end
+            end
+        end) 
+    end
+end)
+Section:NewButton("Cham Players", "Click To Show Cham Players", function()
+    local dwEntities = game:GetService("Players")
+    local dwLocalPlayer = dwEntities.LocalPlayer 
+    local dwRunService = game:GetService("RunService")
+    
+    local settings_tbl = {
+        ESP_Enabled = true,
+        ESP_TeamCheck = false,
+        Chams = true,
+        Chams_Color = Color3.fromRGB(0,0,255),
+        Chams_Transparency = 0.1,
+        Chams_Glow_Color = Color3.fromRGB(255,0,0)
+    }
+    
+    function destroy_chams(char)
+    
+        for k,v in next, char:GetChildren() do 
+    
+            if v:IsA("BasePart") and v.Transparency ~= 1 then
+    
+                if v:FindFirstChild("Glow") and 
+                v:FindFirstChild("Chams") then
+    
+                    v.Glow:Destroy()
+                    v.Chams:Destroy() 
+    
+                end 
+    
+            end 
+    
+        end 
+    
+    end
+    
+    dwRunService.Heartbeat:Connect(function()
+    
+        if settings_tbl.ESP_Enabled then
+    
+            for k,v in next, dwEntities:GetPlayers() do 
+    
+                if v ~= dwLocalPlayer then
+    
+                    if v.Character and
+                    v.Character:FindFirstChild("HumanoidRootPart") and 
+                    v.Character:FindFirstChild("Humanoid") and 
+                    v.Character:FindFirstChild("Humanoid").Health ~= 0 then
+    
+                        if settings_tbl.ESP_TeamCheck == false then
+    
+                            local char = v.Character 
+    
+                            for k,b in next, char:GetChildren() do 
+    
+                                if b:IsA("BasePart") and 
+                                b.Transparency ~= 1 then
+                                    
+                                    if settings_tbl.Chams then
+    
+                                        if not b:FindFirstChild("Glow") and
+                                        not b:FindFirstChild("Chams") then
+    
+                                            local chams_box = Instance.new("BoxHandleAdornment", b)
+                                            chams_box.Name = "Chams"
+                                            chams_box.AlwaysOnTop = true 
+                                            chams_box.ZIndex = 4 
+                                            chams_box.Adornee = b 
+                                            chams_box.Color3 = settings_tbl.Chams_Color
+                                            chams_box.Transparency = settings_tbl.Chams_Transparency
+                                            chams_box.Size = b.Size + Vector3.new(0.02, 0.02, 0.02)
+    
+                                            local glow_box = Instance.new("BoxHandleAdornment", b)
+                                            glow_box.Name = "Glow"
+                                            glow_box.AlwaysOnTop = false 
+                                            glow_box.ZIndex = 3 
+                                            glow_box.Adornee = b 
+                                            glow_box.Color3 = settings_tbl.Chams_Glow_Color
+                                            glow_box.Size = chams_box.Size + Vector3.new(0.13, 0.13, 0.13)
+    
+                                        end
+    
+                                    else
+    
+                                        destroy_chams(char)
+    
+                                    end
+                                
+                                end
+    
+                            end
+    
+                        else
+    
+                            if v.Team == dwLocalPlayer.Team then
+                                destroy_chams(v.Character)
+                            end
+    
+                        end
+    
+                    else
+    
+                        destroy_chams(v.Character)
+    
+                    end
+    
+                end
+    
+            end
+    
+        else 
+    
+            for k,v in next, dwEntities:GetPlayers() do 
+    
+                if v ~= dwLocalPlayer and 
+                v.Character and 
+                v.Character:FindFirstChild("HumanoidRootPart") and 
+                v.Character:FindFirstChild("Humanoid") and 
+                v.Character:FindFirstChild("Humanoid").Health ~= 0 then
+                    
+                    destroy_chams(v.Character)
+    
+                end
+    
+            end
+    
+        end
+    
+    end)
+end)
+Section:NewButton("Hitbox (w = enabled; p = disabled)", "Click To Show Player's Hitbox", function()
+    game:GetService("StarterGui"):SetCore("SendNotification", {Title = "Loaded", Text = "w = Enabled : p = disabled."})
+    local player = game.Players.LocalPlayer
+    local mouse = player:GetMouse()
+    
+    -- Settings
+    
+    bind = ""
+    bind2 = "w"
+    bind3 = "p"
+    
+    -- Script
+    
+    mouse.KeyDown:connect(function(key)
+    if key == bind then
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(1254.09656, 137.906067, -172.128204)
+    end
+    end)
+    
+    mouse.KeyDown:connect(function(key2)
+    if key2 == bind2 then
+    _G.HeadSize = 17
+    _G.Disabled = true
+    
+    
+    if _G.Disabled then
+    for i,v in next, game:GetService('Players'):GetPlayers() do
+    if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+    pcall(function()
+    v.Character.HumanoidRootPart.Size = Vector3.new(_G.HeadSize,_G.HeadSize,_G.HeadSize)
+    v.Character.HumanoidRootPart.Transparency = 0.7
+    v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Bright red")
+    v.Character.HumanoidRootPart.Material = "Neon"
+    v.Character.HumanoidRootPart.CanCollide = false
+    end)
+    end
+    end
+    end
+    end
+    end)
+    
+    mouse.KeyDown:connect(function(key3)
+    if key3 == bind3 then
+    _G.HeadSize = 17
+    _G.Disabled = true
+    
+    
+    for i,v in next, game:GetService('Players'):GetPlayers() do
+    if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+    pcall(function()
+    v.Character.HumanoidRootPart.Size = Vector3.new(2, 2, 1)
+    v.Character.HumanoidRootPart.Transparency = 1
+    v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Medium stone grey")
+    v.Character.HumanoidRootPart.Material = "Plastic"
+    v.Character.HumanoidRootPart.CanCollide = false
+    end)
+    end
+    end
+    end
+    end)
+end)
+
+--- Misc
+local Tab = Window:NewTab("Misc")
+local Section = Tab:NewSection("Misc")
+
+--- Player's Power
+Section:NewSlider("WalkSpeed", "Click To Change WalkSpeed", 500, 16, function(s)
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = s
+end)
+Section:NewSlider("JumpPower", "Click To Change JumpPower", 500, 50, function(jp)
+    game.Players.LocalPlayer.Character.Humanoid.JumpPower = jp
+end)
+
+--- Select Player To Teleport
+local Section = Tab:NewSection("Select Player")
+players = {}
+
+for i,v in pairs(game:GetService("Players"):GetChildren()) do
+    table.insert(players,v.Name)
+end
+
+Section:NewDropdown("Select Player", "Click To Name", players, function(abc)
+      Select = abc
+end)
+Section:NewButton("Teleport", "Click To Teleport", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players[Select].Character.HumanoidRootPart.CFrame
+end)
+
+--- Credits
+local Tab = Window:NewTab("Credits")
+local Section = Tab:NewSection("Credits By Dev_Bacon")
+Section:NewButton("Credits By Dev_Bacon|Youtube - Dev_Bacon", "youtube.com/channel/UCjuyjtQYk8lWeIfXoJmYzMA", function()
+    print("Clicked")
+end)
+Section:NewButton("Discord - Bacon Hub(Link In Button Info)", "Discord - Bacon Hub|https://discord.gg/mpAAAtKc", function()
+    print("Clicked")
+end)
